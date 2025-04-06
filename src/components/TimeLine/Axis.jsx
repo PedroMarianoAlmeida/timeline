@@ -15,21 +15,48 @@ export const Axis = ({ timeline }) => {
     return position;
   });
 
+  const allEvents = timeline.lines.flat();
+
   return (
     <div className="axis">
       <div className="axis-line" />
-      {ticks.map((tick, index) => (
-        <Tooltip
-          key={index}
-          trigger={
-            <div
-              className="axis-marker"
-              style={{ left: `${markerPositions[index]}%` }}
-            />
-          }
-          content={`${tick.start}`}
-        />
-      ))}
+      {ticks.map((tick, index) => {
+        const tickTime = new Date(tick.start);
+        const eventsAtMarker = allEvents.filter((event) => {
+          if (!event.isEvent) return false;
+          const eventStart = new Date(event.start);
+          const eventEnd = new Date(event.end);
+          return eventStart <= tickTime && eventEnd >= tickTime;
+        });
+
+        return (
+          <Tooltip
+            key={index}
+            trigger={
+              <div
+                className="axis-marker"
+                style={{ left: `${markerPositions[index]}%` }}
+              />
+            }
+            content={
+              <div className="event-tooltip-content">
+                <div>
+                  <strong>{tick.start}</strong>
+                </div>
+                {eventsAtMarker.length > 0 ? (
+                  <ul>
+                    {eventsAtMarker.map((event, idx) => (
+                      <li key={idx}>{event.name}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div>No events</div>
+                )}
+              </div>
+            }
+          />
+        );
+      })}
       {/* Optionally, add a final marker at 100% for the timeline end */}
       <Tooltip
         key="final"
