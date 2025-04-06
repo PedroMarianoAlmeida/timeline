@@ -1,26 +1,39 @@
-import "./timeline.css";
+import React from "react";
 import { Tooltip } from "../sharable/ToolTip";
+import "./timeline.css";
 
-export const Event = ({ event, totalDuration }) => {
-  const { name, duration, isEvent, start, end } = event;
-  const percentWidth = (duration / totalDuration) * 100;
+export const Event = ({ event, timeline }) => {
+  // Calculate timeline boundaries using the first and last ticks
+  const timelineStart = new Date(timeline.time[0].start).getTime();
+  const timelineEnd = new Date(
+    timeline.time[timeline.time.length - 1].end
+  ).getTime();
+  const totalMs = timelineEnd - timelineStart;
 
-  if (!isEvent)
-    return <div style={{ width: `${percentWidth}%` }} className="gap-event" />;
+  // Calculate event duration using actual dates
+  const eventStartMs = new Date(event.start).getTime();
+  const eventEndMs = new Date(event.end).getTime();
+  const widthPercent = ((eventEndMs - eventStartMs) / totalMs) * 100;
+
+  if (!event.isEvent) {
+    return <div style={{ width: `${widthPercent}%` }} className="gap-event" />;
+  }
 
   return (
     <Tooltip
       trigger={
-        <div style={{ width: `${percentWidth}%` }} className="event">
-          {name}
+        <div style={{ width: `${widthPercent}%` }} className="event">
+          {event.name}
         </div>
       }
       content={
         <div className="event-tooltip-content">
-          {name}
+          <div>
+            <strong>{event.name}</strong>
+          </div>
           <ul>
-            <li>Start: {start}</li>
-            <li>End: {end}</li>
+            <li>Start: {event.start}</li>
+            <li>End: {event.end}</li>
           </ul>
         </div>
       }

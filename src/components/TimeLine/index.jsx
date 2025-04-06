@@ -10,8 +10,8 @@ export const TimeLine = ({ timeline }) => {
           {line.map((event, eventIndex) => (
             <Event
               event={event}
+              timeline={timeline}
               key={`${lineIndex}-${eventIndex}-${event.name}`}
-              totalDuration={timeline.totalDuration}
             />
           ))}
         </EventLine>
