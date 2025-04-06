@@ -22,6 +22,10 @@
   /* The with is inline because it is dynamic based on duration*/
 }
 
+.gap-event {
+  opacity: 0;
+}
+
 .axis {
   position: relative;
   width: 100%;
