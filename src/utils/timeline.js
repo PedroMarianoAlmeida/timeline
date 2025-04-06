@@ -7,10 +7,10 @@ export function createTimeline(timelineItems) {
   // Build the lines using reduce.
   const result = sortedItems.reduce(
     (acc, curr) => {
-      // Compute the event duration (in days)
+      // Compute the event duration (in days) and add 1 for the end of day.
       const startDate = new Date(curr.start);
       const endDate = new Date(curr.end);
-      const duration = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // The end date is the end of the day (otherwise there is things with zero duration)
+      const duration = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
 
       // Create an event object with the required properties.
       const eventObj = {
@@ -40,14 +40,14 @@ export function createTimeline(timelineItems) {
     { lines: [] }
   );
 
-  // Create a set of all unique time marks (start and end dates)
+  // Create a set of all unique time marks (start and end dates).
   const timeMarksSet = new Set();
   timelineItems.forEach((item) => {
     timeMarksSet.add(item.start);
     timeMarksSet.add(item.end);
   });
 
-  // Convert the set to an array and sort the time marks
+  // Convert the set to an array and sort the time marks.
   const timeMarks = Array.from(timeMarksSet).sort(
     (a, b) => new Date(a) - new Date(b)
   );
@@ -62,5 +62,10 @@ export function createTimeline(timelineItems) {
     time.push({ start, end, duration });
   }
 
-  return { lines: result.lines, time };
+  // Calculate total duration: from the earliest start to the latest end, plus one day.
+  const earliestStart = new Date(timeMarks[0]);
+  const latestEnd = new Date(timeMarks[timeMarks.length - 1]);
+  const totalDuration = (latestEnd - earliestStart) / (1000 * 60 * 60 * 24) + 1;
+
+  return { lines: result.lines, time, totalDuration };
 }

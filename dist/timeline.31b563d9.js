@@ -682,24 +682,11 @@ var _client = require("react-dom/client");
 var _clientDefault = parcelHelpers.interopDefault(_client);
 var _timelineItemsJs = require("./timelineItems.js");
 var _timelineItemsJsDefault = parcelHelpers.interopDefault(_timelineItemsJs);
+var _timeLine = require("./components/TimeLine");
 var _timelineJs = require("./utils/timeline.js");
 function App() {
-    console.log({
-        timelineItems: (0, _timelineItemsJsDefault.default),
-        timeline: (0, _timelineJs.createTimeline)((0, _timelineItemsJsDefault.default))
-    });
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                children: [
-                    "Good luck with your assignment! ",
-                    "\u2728"
-                ]
-            }, void 0, true, {
-                fileName: "src/index.js",
-                lineNumber: 11,
-                columnNumber: 7
-            }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
                 children: [
                     (0, _timelineItemsJsDefault.default).length,
@@ -709,11 +696,18 @@ function App() {
                 fileName: "src/index.js",
                 lineNumber: 12,
                 columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _timeLine.TimeLine), {
+                timeline: (0, _timelineJs.createTimeline)((0, _timelineItemsJsDefault.default))
+            }, void 0, false, {
+                fileName: "src/index.js",
+                lineNumber: 13,
+                columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "src/index.js",
-        lineNumber: 10,
+        lineNumber: 11,
         columnNumber: 5
     }, this);
 }
@@ -721,7 +715,7 @@ _c = App;
 const root = (0, _clientDefault.default).createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(App, {}, void 0, false, {
     fileName: "src/index.js",
-    lineNumber: 18,
+    lineNumber: 19,
     columnNumber: 13
 }, undefined));
 var _c;
@@ -732,7 +726,7 @@ $RefreshReg$(_c, "App");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","./timelineItems.js":"FMnwD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./utils/timeline.js":"jfw34"}],"dVPUn":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","./timelineItems.js":"FMnwD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./utils/timeline.js":"jfw34","./components/TimeLine":"JVSKi"}],"dVPUn":[function(require,module,exports,__globalThis) {
 'use strict';
 module.exports = require("ee51401569654d91");
 
@@ -27395,10 +27389,10 @@ function createTimeline(timelineItems) {
     const sortedItems = timelineItems.sort((a, b)=>new Date(a.start) - new Date(b.start));
     // Build the lines using reduce.
     const result = sortedItems.reduce((acc, curr)=>{
-        // Compute the event duration (in days)
+        // Compute the event duration (in days) and add 1 for the end of day.
         const startDate = new Date(curr.start);
         const endDate = new Date(curr.end);
-        const duration = (endDate - startDate) / 86400000 + 1; // The end date is the end of the day (otherwise there is things with zero duration)
+        const duration = (endDate - startDate) / 86400000 + 1;
         // Create an event object with the required properties.
         const eventObj = {
             name: curr.name,
@@ -27425,13 +27419,13 @@ function createTimeline(timelineItems) {
     }, {
         lines: []
     });
-    // Create a set of all unique time marks (start and end dates)
+    // Create a set of all unique time marks (start and end dates).
     const timeMarksSet = new Set();
     timelineItems.forEach((item)=>{
         timeMarksSet.add(item.start);
         timeMarksSet.add(item.end);
     });
-    // Convert the set to an array and sort the time marks
+    // Convert the set to an array and sort the time marks.
     const timeMarks = Array.from(timeMarksSet).sort((a, b)=>new Date(a) - new Date(b));
     // Build the time segments array:
     // Each segment is defined by a start time mark, the next time mark as end, and the duration (in days) between them.
@@ -27446,12 +27440,81 @@ function createTimeline(timelineItems) {
             duration
         });
     }
+    // Calculate total duration: from the earliest start to the latest end, plus one day.
+    const earliestStart = new Date(timeMarks[0]);
+    const latestEnd = new Date(timeMarks[timeMarks.length - 1]);
+    const totalDuration = (latestEnd - earliestStart) / 86400000 + 1;
     return {
         lines: result.lines,
-        time
+        time,
+        totalDuration
     };
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire9642", {}, null, null, "http://localhost:1234")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"JVSKi":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$6774 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$6774.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$6774.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "TimeLine", ()=>TimeLine);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+const TimeLine = ({ timeline })=>{
+    console.log({
+        timeline
+    });
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        children: timeline.lines.map((line, index)=>{
+            return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                style: {
+                    display: "flex",
+                    gap: "4px",
+                    width: "100%"
+                },
+                children: line.map((event)=>{
+                    const { name, duration } = event;
+                    const percentWidth = duration / timeline.totalDuration * 100;
+                    console.log({
+                        event,
+                        percentWidth,
+                        totalDuration: timeline.totalDuration
+                    });
+                    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                        style: {
+                            width: `${percentWidth}%`
+                        },
+                        children: event.name
+                    }, `${index}-${name}`, false, {
+                        fileName: "src/components/TimeLine/index.jsx",
+                        lineNumber: 22,
+                        columnNumber: 17
+                    }, undefined);
+                })
+            }, `line-${index}`, false, {
+                fileName: "src/components/TimeLine/index.jsx",
+                lineNumber: 8,
+                columnNumber: 11
+            }, undefined);
+        })
+    }, void 0, false, {
+        fileName: "src/components/TimeLine/index.jsx",
+        lineNumber: 5,
+        columnNumber: 5
+    }, undefined);
+};
+_c = TimeLine;
+var _c;
+$RefreshReg$(_c, "TimeLine");
+
+  $parcel$ReactRefreshHelpers$6774.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire9642", {}, null, null, "http://localhost:1234")
 
 //# sourceMappingURL=timeline.31b563d9.js.map
