@@ -5,12 +5,12 @@ import { ChartContainer } from "./ChartContainer";
 export const TimeLine = ({ timeline }) => {
   return (
     <ChartContainer timeTicks={timeline.time}>
-      {timeline.lines.map((line, index) => (
-        <EventLine key={index}>
-          {line.map((event) => (
+      {timeline.lines.map((line, lineIndex) => (
+        <EventLine key={lineIndex}>
+          {line.map((event, eventIndex) => (
             <Event
               event={event}
-              key={`${index}-${event.name}`}
+              key={`${lineIndex}-${eventIndex}-${event.name}`}
               totalDuration={timeline.totalDuration}
             />
           ))}
