@@ -1,8 +1,9 @@
 .event {
   background-color: #f0f0f0; /* light gray background */
-  border-radius: 8px;        /* rounded corners */
-  padding: 8px 12px;         /* optional padding for better visual */
-  white-space: nowrap;       /* prevent text from wrapping */
-  overflow: hidden;          /* hide the overflow */
-  text-overflow: ellipsis;   /* show "..." when text is too long */
+  border-radius: 8px; /* rounded corners */
+  padding: 8px 12px; /* optional padding for better visual */
+  white-space: nowrap; /* prevent text from wrapping */
+  overflow: hidden; /* hide the overflow */
+  text-overflow: ellipsis; /* show "..." when text is too long */
+  text-align: center;
 }

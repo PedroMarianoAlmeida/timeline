@@ -1,5 +1,5 @@
 import "./timeline.css";
-import { Tooltip } from "./../sharable/ToolTip";
+import { Tooltip } from "../sharable/ToolTip";
 
 export const Event = ({ event, totalDuration }) => {
   const { name, duration } = event;
