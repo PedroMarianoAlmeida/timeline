@@ -21,6 +21,21 @@
   text-align: center;
   /* The with is inline because it is dynamic based on duration*/
 }
+.event-tooltip-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-tooltip-content ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.gap-event {
+  opacity: 0;
+}
 
 .axis {
   position: relative;
