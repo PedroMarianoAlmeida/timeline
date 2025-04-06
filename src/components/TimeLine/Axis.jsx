@@ -1,31 +1,41 @@
 import React from "react";
+import { Tooltip } from "../sharable/ToolTip";
 import "./timeline.css";
 
-export const Axis = ({ timeTicks }) => {
-  // Use the first tick's start as the timeline start date
-  const timelineStartDate = new Date(timeTicks[0].start);
-  // Use the last tick's end as the timeline end date
-  const timelineEndDate = new Date(timeTicks[timeTicks.length - 1].end);
-  const totalDuration = timelineEndDate - timelineStartDate;
+export const Axis = ({ timeline }) => {
+  const ticks = timeline.time;
+  const totalDuration = timeline.totalDuration;
 
-  // Computes left percentage for a given tick based on its start date
-  const calculateLeftPercentage = (tick) => {
-    const tickDate = new Date(tick.start);
-    const diff = tickDate - timelineStartDate;
-    return (diff / totalDuration) * 100;
-  };
+  // Pre-compute marker positions using the cumulative durations.
+  // For each tick, we calculate the left offset as the sum of the durations of all previous ticks.
+  let cumulative = 0;
+  const markerPositions = ticks.map((tick) => {
+    const position = (cumulative / totalDuration) * 100;
+    cumulative += tick.duration;
+    return position;
+  });
 
   return (
     <div className="axis">
       <div className="axis-line" />
-      {timeTicks.map((tick, index) => (
-        <div
+      {ticks.map((tick, index) => (
+        <Tooltip
           key={index}
-          className="axis-marker"
-          style={{ left: `${calculateLeftPercentage(tick)}%` }}
-          title={`Start: ${tick.start} - End: ${tick.end}`}
+          trigger={
+            <div
+              className="axis-marker"
+              style={{ left: `${markerPositions[index]}%` }}
+            />
+          }
+          content={`${tick.start}`}
         />
       ))}
+      {/* Optionally, add a final marker at 100% for the timeline end */}
+      <Tooltip
+        key="final"
+        trigger={<div className="axis-marker" style={{ left: `100%` }} />}
+        content={ticks[ticks.length - 1].end}
+      />
     </div>
   );
 };
