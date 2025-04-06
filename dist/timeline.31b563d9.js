@@ -27470,14 +27470,28 @@ const TimeLine = ({ timeline })=>{
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: timeline.lines.map((line, index)=>{
             return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                style: {
+                    display: "flex",
+                    gap: "4px",
+                    width: "100%"
+                },
                 children: line.map((event)=>{
-                    const { name } = event;
+                    const { name, duration } = event;
+                    const percentWidth = duration / timeline.totalDuration * 100;
+                    console.log({
+                        event,
+                        percentWidth,
+                        totalDuration: timeline.totalDuration
+                    });
                     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                        style: {
+                            width: `${percentWidth}%`
+                        },
                         children: event.name
                     }, `${index}-${name}`, false, {
                         fileName: "src/components/TimeLine/index.jsx",
-                        lineNumber: 11,
-                        columnNumber: 22
+                        lineNumber: 22,
+                        columnNumber: 17
                     }, undefined);
                 })
             }, `line-${index}`, false, {
