@@ -41,7 +41,9 @@ export const Axis = ({ timeline }) => {
             content={
               <div className="event-tooltip-content">
                 <div>
-                  <strong>{tick.start}</strong>
+                  <strong>
+                    {tick.start}
+                  </strong>
                 </div>
                 {eventsAtMarker.length > 0 ? (
                   <ul>
