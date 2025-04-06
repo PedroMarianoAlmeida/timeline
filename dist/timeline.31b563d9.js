@@ -682,7 +682,12 @@ var _client = require("react-dom/client");
 var _clientDefault = parcelHelpers.interopDefault(_client);
 var _timelineItemsJs = require("./timelineItems.js");
 var _timelineItemsJsDefault = parcelHelpers.interopDefault(_timelineItemsJs);
+var _timelineJs = require("./utils/timeline.js");
 function App() {
+    console.log({
+        timelineItems: (0, _timelineItemsJsDefault.default),
+        timeline: (0, _timelineJs.createTimeline)((0, _timelineItemsJsDefault.default))
+    });
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
@@ -692,7 +697,7 @@ function App() {
                 ]
             }, void 0, true, {
                 fileName: "src/index.js",
-                lineNumber: 8,
+                lineNumber: 11,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
@@ -702,13 +707,13 @@ function App() {
                 ]
             }, void 0, true, {
                 fileName: "src/index.js",
-                lineNumber: 9,
+                lineNumber: 12,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "src/index.js",
-        lineNumber: 7,
+        lineNumber: 10,
         columnNumber: 5
     }, this);
 }
@@ -716,7 +721,7 @@ _c = App;
 const root = (0, _clientDefault.default).createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(App, {}, void 0, false, {
     fileName: "src/index.js",
-    lineNumber: 15,
+    lineNumber: 18,
     columnNumber: 13
 }, undefined));
 var _c;
@@ -727,7 +732,7 @@ $RefreshReg$(_c, "App");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","./timelineItems.js":"FMnwD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"dVPUn":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","./timelineItems.js":"FMnwD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./utils/timeline.js":"jfw34"}],"dVPUn":[function(require,module,exports,__globalThis) {
 'use strict';
 module.exports = require("ee51401569654d91");
 
@@ -27379,6 +27384,54 @@ function $da9882e673ac146b$var$ErrorOverlay() {
         editorHandler: $da9882e673ac146b$var$editorHandler
     });
     return null;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jfw34":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "createTimeline", ()=>createTimeline);
+function createTimeline(timelineItems) {
+    // First, sort the events by their start date.
+    const sortedItems = timelineItems.sort((a, b)=>new Date(a.start) - new Date(b.start));
+    // Reduce to create lines and compute overall timeline boundaries.
+    const timeline = sortedItems.reduce((acc, curr)=>{
+        // Compute the duration for the current event (in days)
+        const startDate = new Date(curr.start);
+        const endDate = new Date(curr.end);
+        const duration = (endDate - startDate) / 86400000;
+        // Create the event object with the required properties.
+        const eventObj = {
+            name: curr.name,
+            start: curr.start,
+            end: curr.end,
+            duration
+        };
+        // Try to place this event in an existing line where there's no overlap.
+        let placed = false;
+        for (let line of acc.lines){
+            const lastEvent = line[line.length - 1];
+            // If the current event starts after the last event in the line ends, it can be placed here.
+            if (new Date(eventObj.start) > new Date(lastEvent.end)) {
+                line.push(eventObj);
+                placed = true;
+                break;
+            }
+        }
+        // If no suitable line is found, create a new line.
+        if (!placed) acc.lines.push([
+            eventObj
+        ]);
+        // Update overall timeline start and end boundaries.
+        if (!acc.time.start || new Date(curr.start) < new Date(acc.time.start)) acc.time.start = curr.start;
+        if (!acc.time.end || new Date(curr.end) > new Date(acc.time.end)) acc.time.end = curr.end;
+        return acc;
+    }, {
+        lines: [],
+        time: {}
+    });
+    // Calculate overall timeline duration in days.
+    timeline.time.duration = (new Date(timeline.time.end) - new Date(timeline.time.start)) / 86400000;
+    return timeline;
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire9642", {}, null, null, "http://localhost:1234")
