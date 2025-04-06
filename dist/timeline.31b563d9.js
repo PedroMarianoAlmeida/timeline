@@ -27389,10 +27389,10 @@ function createTimeline(timelineItems) {
     const sortedItems = timelineItems.sort((a, b)=>new Date(a.start) - new Date(b.start));
     // Build the lines using reduce.
     const result = sortedItems.reduce((acc, curr)=>{
-        // Compute the event duration (in days)
+        // Compute the event duration (in days) and add 1 for the end of day.
         const startDate = new Date(curr.start);
         const endDate = new Date(curr.end);
-        const duration = (endDate - startDate) / 86400000 + 1; // The end date is the end of the day (otherwise there is things with zero duration)
+        const duration = (endDate - startDate) / 86400000 + 1;
         // Create an event object with the required properties.
         const eventObj = {
             name: curr.name,
@@ -27419,13 +27419,13 @@ function createTimeline(timelineItems) {
     }, {
         lines: []
     });
-    // Create a set of all unique time marks (start and end dates)
+    // Create a set of all unique time marks (start and end dates).
     const timeMarksSet = new Set();
     timelineItems.forEach((item)=>{
         timeMarksSet.add(item.start);
         timeMarksSet.add(item.end);
     });
-    // Convert the set to an array and sort the time marks
+    // Convert the set to an array and sort the time marks.
     const timeMarks = Array.from(timeMarksSet).sort((a, b)=>new Date(a) - new Date(b));
     // Build the time segments array:
     // Each segment is defined by a start time mark, the next time mark as end, and the duration (in days) between them.
@@ -27440,9 +27440,14 @@ function createTimeline(timelineItems) {
             duration
         });
     }
+    // Calculate total duration: from the earliest start to the latest end, plus one day.
+    const earliestStart = new Date(timeMarks[0]);
+    const latestEnd = new Date(timeMarks[timeMarks.length - 1]);
+    const totalDuration = (latestEnd - earliestStart) / 86400000 + 1;
     return {
         lines: result.lines,
-        time
+        time,
+        totalDuration
     };
 }
 
@@ -27462,12 +27467,29 @@ const TimeLine = ({ timeline })=>{
     console.log({
         timeline
     });
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-        children: "TimeLine"
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        children: timeline.lines.map((line, index)=>{
+            return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                children: line.map((event)=>{
+                    const { name } = event;
+                    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                        children: event.name
+                    }, `${index}-${name}`, false, {
+                        fileName: "src/components/TimeLine/index.jsx",
+                        lineNumber: 11,
+                        columnNumber: 22
+                    }, undefined);
+                })
+            }, `line-${index}`, false, {
+                fileName: "src/components/TimeLine/index.jsx",
+                lineNumber: 8,
+                columnNumber: 11
+            }, undefined);
+        })
     }, void 0, false, {
         fileName: "src/components/TimeLine/index.jsx",
-        lineNumber: 4,
-        columnNumber: 10
+        lineNumber: 5,
+        columnNumber: 5
     }, undefined);
 };
 _c = TimeLine;
