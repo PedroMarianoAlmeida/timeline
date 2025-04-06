@@ -1,22 +1,20 @@
 import { Event } from "./Event";
+import { EventLine } from "./EventLine";
 
 export const TimeLine = ({ timeline }) => {
-  console.log({ timeline });
-
   return (
     <div>
-      {timeline.lines.map((line, index) => {
-        return (
-          <div
-            key={`line-${index}`}
-            style={{ display: "flex", gap: "4px", width: "100%" }}
-          >
-            {line.map((event) => (
-              <Event event={event} key={`${index}-${event.name}`} totalDuration={timeline.totalDuration}/>
-            ))}
-          </div>
-        );
-      })}
+      {timeline.lines.map((line, index) => (
+        <EventLine key={index}>
+          {line.map((event) => (
+            <Event
+              event={event}
+              key={`${index}-${event.name}`}
+              totalDuration={timeline.totalDuration}
+            />
+          ))}
+        </EventLine>
+      ))}
     </div>
   );
 };
