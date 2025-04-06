@@ -21,3 +21,26 @@
   text-align: center;
   /* The with is inline because it is dynamic based on duration*/
 }
+
+.axis {
+  position: relative;
+  width: 100%;
+  height: 40px; /* Adjust as needed */
+  margin-bottom: 20px;
+}
+
+.axis-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 2px solid #000;
+}
+
+.axis-marker {
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  background-color: #000; /* Red marker */
+  top: calc(50% - 5px);
+}
