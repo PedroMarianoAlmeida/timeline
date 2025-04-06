@@ -1,31 +1,65 @@
 import React from "react";
+import { Tooltip } from "../sharable/ToolTip";
 import "./timeline.css";
 
-export const Axis = ({ timeTicks }) => {
-  // Use the first tick's start as the timeline start date
-  const timelineStartDate = new Date(timeTicks[0].start);
-  // Use the last tick's end as the timeline end date
-  const timelineEndDate = new Date(timeTicks[timeTicks.length - 1].end);
-  const totalDuration = timelineEndDate - timelineStartDate;
+export const Axis = ({ timeline }) => {
+  // Compute overall timeline boundaries from the first and last ticks
+  const timelineStart = new Date(timeline.time[0].start).getTime();
+  const timelineEnd = new Date(
+    timeline.time[timeline.time.length - 1].end
+  ).getTime();
+  const totalMs = timelineEnd - timelineStart;
 
-  // Computes left percentage for a given tick based on its start date
-  const calculateLeftPercentage = (tick) => {
-    const tickDate = new Date(tick.start);
-    const diff = tickDate - timelineStartDate;
-    return (diff / totalDuration) * 100;
-  };
+  // Flatten all events from all lines for tooltip details
+  const allEvents = timeline.lines.flat();
 
   return (
     <div className="axis">
       <div className="axis-line" />
-      {timeTicks.map((tick, index) => (
-        <div
-          key={index}
-          className="axis-marker"
-          style={{ left: `${calculateLeftPercentage(tick)}%` }}
-          title={`Start: ${tick.start} - End: ${tick.end}`}
-        />
-      ))}
+      {timeline.time.map((tick, index) => {
+        const tickTimeMs = new Date(tick.start).getTime();
+        // Calculate the left offset based on the timeline boundaries
+        const offset = ((tickTimeMs - timelineStart) / totalMs) * 100;
+
+        // Find events that are active at this tick time
+        const eventsAtMarker = allEvents.filter((event) => {
+          if (!event.isEvent) return false;
+          const eventStartMs = new Date(event.start).getTime();
+          const eventEndMs = new Date(event.end).getTime();
+          return eventStartMs <= tickTimeMs && eventEndMs >= tickTimeMs;
+        });
+
+        return (
+          <Tooltip
+            key={index}
+            trigger={
+              <div className="axis-marker" style={{ left: `${offset}%` }} />
+            }
+            content={
+              <div className="event-tooltip-content">
+                <div>
+                  <strong>{tick.start}</strong>
+                </div>
+                {eventsAtMarker.length > 0 ? (
+                  <ul>
+                    {eventsAtMarker.map((event, idx) => (
+                      <li key={idx}>{event.name}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div>No events</div>
+                )}
+              </div>
+            }
+          />
+        );
+      })}
+      {/* Final marker at 100% for the timeline end */}
+      <Tooltip
+        key="final"
+        trigger={<div className="axis-marker" style={{ left: "100%" }} />}
+        content={timeline.time[timeline.time.length - 1].end}
+      />
     </div>
   );
 };

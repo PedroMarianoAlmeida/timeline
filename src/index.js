@@ -9,7 +9,6 @@ import { createTimeline } from "./utils/timeline.js";
 function App() {
   return (
     <div>
-      <h3>{timelineItems.length} timeline items to render</h3>
       <TimeLine timeline={createTimeline(timelineItems)} />
     </div>
   );
