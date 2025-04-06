@@ -3,47 +3,42 @@ import { Tooltip } from "../sharable/ToolTip";
 import "./timeline.css";
 
 export const Axis = ({ timeline }) => {
-  const ticks = timeline.time;
-  const totalDuration = timeline.totalDuration;
+  // Compute overall timeline boundaries from the first and last ticks
+  const timelineStart = new Date(timeline.time[0].start).getTime();
+  const timelineEnd = new Date(
+    timeline.time[timeline.time.length - 1].end
+  ).getTime();
+  const totalMs = timelineEnd - timelineStart;
 
-  // Pre-compute marker positions using the cumulative durations.
-  // For each tick, we calculate the left offset as the sum of the durations of all previous ticks.
-  let cumulative = 0;
-  const markerPositions = ticks.map((tick) => {
-    const position = (cumulative / totalDuration) * 100;
-    cumulative += tick.duration;
-    return position;
-  });
-
+  // Flatten all events from all lines for tooltip details
   const allEvents = timeline.lines.flat();
 
   return (
     <div className="axis">
       <div className="axis-line" />
-      {ticks.map((tick, index) => {
-        const tickTime = new Date(tick.start);
+      {timeline.time.map((tick, index) => {
+        const tickTimeMs = new Date(tick.start).getTime();
+        // Calculate the left offset based on the timeline boundaries
+        const offset = ((tickTimeMs - timelineStart) / totalMs) * 100;
+
+        // Find events that are active at this tick time
         const eventsAtMarker = allEvents.filter((event) => {
           if (!event.isEvent) return false;
-          const eventStart = new Date(event.start);
-          const eventEnd = new Date(event.end);
-          return eventStart <= tickTime && eventEnd >= tickTime;
+          const eventStartMs = new Date(event.start).getTime();
+          const eventEndMs = new Date(event.end).getTime();
+          return eventStartMs <= tickTimeMs && eventEndMs >= tickTimeMs;
         });
 
         return (
           <Tooltip
             key={index}
             trigger={
-              <div
-                className="axis-marker"
-                style={{ left: `${markerPositions[index]}%` }}
-              />
+              <div className="axis-marker" style={{ left: `${offset}%` }} />
             }
             content={
               <div className="event-tooltip-content">
                 <div>
-                  <strong>
-                    {tick.start}
-                  </strong>
+                  <strong>{tick.start}</strong>
                 </div>
                 {eventsAtMarker.length > 0 ? (
                   <ul>
@@ -59,11 +54,11 @@ export const Axis = ({ timeline }) => {
           />
         );
       })}
-      {/* Optionally, add a final marker at 100% for the timeline end */}
+      {/* Final marker at 100% for the timeline end */}
       <Tooltip
         key="final"
-        trigger={<div className="axis-marker" style={{ left: `100%` }} />}
-        content={ticks[ticks.length - 1].end}
+        trigger={<div className="axis-marker" style={{ left: "100%" }} />}
+        content={timeline.time[timeline.time.length - 1].end}
       />
     </div>
   );
