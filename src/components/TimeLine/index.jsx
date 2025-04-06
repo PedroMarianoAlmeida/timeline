@@ -1,9 +1,10 @@
 import { Event } from "./Event";
 import { EventLine } from "./EventLine";
+import { ChartContainer } from "./ChartContainer";
 
 export const TimeLine = ({ timeline }) => {
   return (
-    <div>
+    <ChartContainer>
       {timeline.lines.map((line, index) => (
         <EventLine key={index}>
           {line.map((event) => (
@@ -15,6 +16,6 @@ export const TimeLine = ({ timeline }) => {
           ))}
         </EventLine>
       ))}
-    </div>
+    </ChartContainer>
   );
 };
