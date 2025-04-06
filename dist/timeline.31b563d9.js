@@ -27463,6 +27463,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "TimeLine", ()=>TimeLine);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _event = require("./Event");
 const TimeLine = ({ timeline })=>{
     console.log({
         timeline
@@ -27475,34 +27476,23 @@ const TimeLine = ({ timeline })=>{
                     gap: "4px",
                     width: "100%"
                 },
-                children: line.map((event)=>{
-                    const { name, duration } = event;
-                    const percentWidth = duration / timeline.totalDuration * 100;
-                    console.log({
-                        event,
-                        percentWidth,
+                children: line.map((event)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _event.Event), {
+                        event: event,
                         totalDuration: timeline.totalDuration
-                    });
-                    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                        style: {
-                            width: `${percentWidth}%`
-                        },
-                        children: event.name
-                    }, `${index}-${name}`, false, {
+                    }, `${index}-${event.name}`, false, {
                         fileName: "src/components/TimeLine/index.jsx",
-                        lineNumber: 22,
-                        columnNumber: 17
-                    }, undefined);
-                })
+                        lineNumber: 15,
+                        columnNumber: 15
+                    }, undefined))
             }, `line-${index}`, false, {
                 fileName: "src/components/TimeLine/index.jsx",
-                lineNumber: 8,
+                lineNumber: 10,
                 columnNumber: 11
             }, undefined);
         })
     }, void 0, false, {
         fileName: "src/components/TimeLine/index.jsx",
-        lineNumber: 5,
+        lineNumber: 7,
         columnNumber: 5
     }, undefined);
 };
@@ -27511,6 +27501,41 @@ var _c;
 $RefreshReg$(_c, "TimeLine");
 
   $parcel$ReactRefreshHelpers$6774.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./Event":"fLiVp"}],"fLiVp":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$22f1 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$22f1.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$22f1.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Event", ()=>Event);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+const Event = ({ event, totalDuration })=>{
+    const { name, duration } = event;
+    const percentWidth = duration / totalDuration * 100;
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+        style: {
+            width: `${percentWidth}%`
+        },
+        children: name
+    }, void 0, false, {
+        fileName: "src/components/TimeLine/Event.jsx",
+        lineNumber: 5,
+        columnNumber: 10
+    }, undefined);
+};
+_c = Event;
+var _c;
+$RefreshReg$(_c, "Event");
+
+  $parcel$ReactRefreshHelpers$22f1.postlude(module);
 } finally {
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
