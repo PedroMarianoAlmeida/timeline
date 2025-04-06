@@ -27517,6 +27517,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Event", ()=>Event);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _timelineCss = require("./timeline.css");
 const Event = ({ event, totalDuration })=>{
     const { name, duration } = event;
     const percentWidth = duration / totalDuration * 100;
@@ -27524,11 +27525,12 @@ const Event = ({ event, totalDuration })=>{
         style: {
             width: `${percentWidth}%`
         },
+        className: "event",
         children: name
     }, void 0, false, {
         fileName: "src/components/TimeLine/Event.jsx",
-        lineNumber: 5,
-        columnNumber: 10
+        lineNumber: 8,
+        columnNumber: 5
     }, undefined);
 };
 _c = Event;
@@ -27540,6 +27542,6 @@ $RefreshReg$(_c, "Event");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire9642", {}, null, null, "http://localhost:1234")
+},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./timeline.css":"8C7Bf"}],"8C7Bf":[function() {},{}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire9642", {}, null, null, "http://localhost:1234")
 
 //# sourceMappingURL=timeline.31b563d9.js.map
