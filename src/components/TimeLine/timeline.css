@@ -1,3 +1,9 @@
+.event-line {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
 .event {
   background-color: #f0f0f0; /* light gray background */
   border-radius: 8px; /* rounded corners */

@@ -8,9 +8,9 @@ export const Event = ({ event, totalDuration }) => {
   return (
     <Tooltip
       trigger={
-        <p style={{ width: `${percentWidth}%` }} className="event">
+        <div style={{ width: `${percentWidth}%` }} className="event">
           {name}
-        </p>
+        </div>
       }
       content={name}
     />
