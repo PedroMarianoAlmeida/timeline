@@ -10,7 +10,7 @@ export function createTimeline(timelineItems) {
       // Compute the event duration (in days)
       const startDate = new Date(curr.start);
       const endDate = new Date(curr.end);
-      const duration = (endDate - startDate) / (1000 * 60 * 60 * 24);
+      const duration = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // The end date is the end of the day (otherwise there is things with zero duration)
 
       // Create an event object with the required properties.
       const eventObj = {
