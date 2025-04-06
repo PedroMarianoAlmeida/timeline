@@ -682,7 +682,12 @@ var _client = require("react-dom/client");
 var _clientDefault = parcelHelpers.interopDefault(_client);
 var _timelineItemsJs = require("./timelineItems.js");
 var _timelineItemsJsDefault = parcelHelpers.interopDefault(_timelineItemsJs);
+var _timelineJs = require("./utils/timeline.js");
 function App() {
+    console.log({
+        timelineItems: (0, _timelineItemsJsDefault.default),
+        timeline: (0, _timelineJs.createTimeline)((0, _timelineItemsJsDefault.default))
+    });
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
@@ -692,7 +697,7 @@ function App() {
                 ]
             }, void 0, true, {
                 fileName: "src/index.js",
-                lineNumber: 8,
+                lineNumber: 11,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
@@ -702,13 +707,13 @@ function App() {
                 ]
             }, void 0, true, {
                 fileName: "src/index.js",
-                lineNumber: 9,
+                lineNumber: 12,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "src/index.js",
-        lineNumber: 7,
+        lineNumber: 10,
         columnNumber: 5
     }, this);
 }
@@ -716,7 +721,7 @@ _c = App;
 const root = (0, _clientDefault.default).createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(App, {}, void 0, false, {
     fileName: "src/index.js",
-    lineNumber: 15,
+    lineNumber: 18,
     columnNumber: 13
 }, undefined));
 var _c;
@@ -727,7 +732,7 @@ $RefreshReg$(_c, "App");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","./timelineItems.js":"FMnwD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"dVPUn":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","./timelineItems.js":"FMnwD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./utils/timeline.js":"jfw34"}],"dVPUn":[function(require,module,exports,__globalThis) {
 'use strict';
 module.exports = require("ee51401569654d91");
 
@@ -27379,6 +27384,72 @@ function $da9882e673ac146b$var$ErrorOverlay() {
         editorHandler: $da9882e673ac146b$var$editorHandler
     });
     return null;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jfw34":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "createTimeline", ()=>createTimeline);
+function createTimeline(timelineItems) {
+    // First, sort the events by their start date.
+    const sortedItems = timelineItems.sort((a, b)=>new Date(a.start) - new Date(b.start));
+    // Build the lines using reduce.
+    const result = sortedItems.reduce((acc, curr)=>{
+        // Compute the event duration (in days)
+        const startDate = new Date(curr.start);
+        const endDate = new Date(curr.end);
+        const duration = (endDate - startDate) / 86400000 + 1; // The end date is the end of the day (otherwise there is things with zero duration)
+        // Create an event object with the required properties.
+        const eventObj = {
+            name: curr.name,
+            start: curr.start,
+            end: curr.end,
+            duration
+        };
+        // Try to place the event in an existing line without overlapping.
+        let placed = false;
+        for (let line of acc.lines){
+            // Compare the start of the current event with the end of the last event in the line.
+            const lastEvent = line[line.length - 1];
+            if (new Date(eventObj.start) > new Date(lastEvent.end)) {
+                line.push(eventObj);
+                placed = true;
+                break;
+            }
+        }
+        // If the event overlaps on all existing lines, create a new line.
+        if (!placed) acc.lines.push([
+            eventObj
+        ]);
+        return acc;
+    }, {
+        lines: []
+    });
+    // Create a set of all unique time marks (start and end dates)
+    const timeMarksSet = new Set();
+    timelineItems.forEach((item)=>{
+        timeMarksSet.add(item.start);
+        timeMarksSet.add(item.end);
+    });
+    // Convert the set to an array and sort the time marks
+    const timeMarks = Array.from(timeMarksSet).sort((a, b)=>new Date(a) - new Date(b));
+    // Build the time segments array:
+    // Each segment is defined by a start time mark, the next time mark as end, and the duration (in days) between them.
+    const time = [];
+    for(let i = 0; i < timeMarks.length - 1; i++){
+        const start = timeMarks[i];
+        const end = timeMarks[i + 1];
+        const duration = (new Date(end) - new Date(start)) / 86400000;
+        time.push({
+            start,
+            end,
+            duration
+        });
+    }
+    return {
+        lines: result.lines,
+        time
+    };
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire9642", {}, null, null, "http://localhost:1234")
