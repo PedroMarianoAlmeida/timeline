@@ -2,20 +2,22 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
 }
 
 .event-line {
   display: flex;
   gap: 4px;
-  width: 100%;
+  width: 100%; /* From container */
 }
 
 .event {
-  background-color: #f0f0f0; /* light gray background */
-  border-radius: 8px; /* rounded corners */
-  padding: 8px 12px; /* optional padding for better visual */
-  white-space: nowrap; /* prevent text from wrapping */
-  overflow: hidden; /* hide the overflow */
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis; /* show "..." when text is too long */
   text-align: center;
+  /* The with is inline because it is dynamic based on duration*/
 }

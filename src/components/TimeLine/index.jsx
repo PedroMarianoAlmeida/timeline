@@ -4,7 +4,7 @@ import { ChartContainer } from "./ChartContainer";
 
 export const TimeLine = ({ timeline }) => {
   return (
-    <ChartContainer>
+    <ChartContainer timeTicks={timeline.time}>
       {timeline.lines.map((line, index) => (
         <EventLine key={index}>
           {line.map((event) => (
