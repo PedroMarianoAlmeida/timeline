@@ -682,24 +682,11 @@ var _client = require("react-dom/client");
 var _clientDefault = parcelHelpers.interopDefault(_client);
 var _timelineItemsJs = require("./timelineItems.js");
 var _timelineItemsJsDefault = parcelHelpers.interopDefault(_timelineItemsJs);
+var _timeLine = require("./components/TimeLine");
 var _timelineJs = require("./utils/timeline.js");
 function App() {
-    console.log({
-        timelineItems: (0, _timelineItemsJsDefault.default),
-        timeline: (0, _timelineJs.createTimeline)((0, _timelineItemsJsDefault.default))
-    });
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                children: [
-                    "Good luck with your assignment! ",
-                    "\u2728"
-                ]
-            }, void 0, true, {
-                fileName: "src/index.js",
-                lineNumber: 11,
-                columnNumber: 7
-            }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
                 children: [
                     (0, _timelineItemsJsDefault.default).length,
@@ -709,11 +696,18 @@ function App() {
                 fileName: "src/index.js",
                 lineNumber: 12,
                 columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _timeLine.TimeLine), {
+                timeline: (0, _timelineJs.createTimeline)((0, _timelineItemsJsDefault.default))
+            }, void 0, false, {
+                fileName: "src/index.js",
+                lineNumber: 13,
+                columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "src/index.js",
-        lineNumber: 10,
+        lineNumber: 11,
         columnNumber: 5
     }, this);
 }
@@ -721,7 +715,7 @@ _c = App;
 const root = (0, _clientDefault.default).createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(App, {}, void 0, false, {
     fileName: "src/index.js",
-    lineNumber: 18,
+    lineNumber: 19,
     columnNumber: 13
 }, undefined));
 var _c;
@@ -732,7 +726,7 @@ $RefreshReg$(_c, "App");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","./timelineItems.js":"FMnwD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./utils/timeline.js":"jfw34"}],"dVPUn":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","./timelineItems.js":"FMnwD","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./utils/timeline.js":"jfw34","./components/TimeLine":"JVSKi"}],"dVPUn":[function(require,module,exports,__globalThis) {
 'use strict';
 module.exports = require("ee51401569654d91");
 
@@ -27452,6 +27446,39 @@ function createTimeline(timelineItems) {
     };
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire9642", {}, null, null, "http://localhost:1234")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"JVSKi":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$6774 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$6774.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$6774.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "TimeLine", ()=>TimeLine);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+const TimeLine = ({ timeline })=>{
+    console.log({
+        timeline
+    });
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+        children: "TimeLine"
+    }, void 0, false, {
+        fileName: "src/components/TimeLine/index.jsx",
+        lineNumber: 4,
+        columnNumber: 10
+    }, undefined);
+};
+_c = TimeLine;
+var _c;
+$RefreshReg$(_c, "TimeLine");
+
+  $parcel$ReactRefreshHelpers$6774.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire9642", {}, null, null, "http://localhost:1234")
 
 //# sourceMappingURL=timeline.31b563d9.js.map
