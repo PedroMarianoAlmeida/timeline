@@ -27393,45 +27393,63 @@ parcelHelpers.export(exports, "createTimeline", ()=>createTimeline);
 function createTimeline(timelineItems) {
     // First, sort the events by their start date.
     const sortedItems = timelineItems.sort((a, b)=>new Date(a.start) - new Date(b.start));
-    // Reduce to create lines and compute overall timeline boundaries.
-    const timeline = sortedItems.reduce((acc, curr)=>{
-        // Compute the duration for the current event (in days)
+    // Build the lines using reduce.
+    const result = sortedItems.reduce((acc, curr)=>{
+        // Compute the event duration (in days)
         const startDate = new Date(curr.start);
         const endDate = new Date(curr.end);
         const duration = (endDate - startDate) / 86400000;
-        // Create the event object with the required properties.
+        // Create an event object with the required properties.
         const eventObj = {
             name: curr.name,
             start: curr.start,
             end: curr.end,
             duration
         };
-        // Try to place this event in an existing line where there's no overlap.
+        // Try to place the event in an existing line without overlapping.
         let placed = false;
         for (let line of acc.lines){
+            // Compare the start of the current event with the end of the last event in the line.
             const lastEvent = line[line.length - 1];
-            // If the current event starts after the last event in the line ends, it can be placed here.
             if (new Date(eventObj.start) > new Date(lastEvent.end)) {
                 line.push(eventObj);
                 placed = true;
                 break;
             }
         }
-        // If no suitable line is found, create a new line.
+        // If the event overlaps on all existing lines, create a new line.
         if (!placed) acc.lines.push([
             eventObj
         ]);
-        // Update overall timeline start and end boundaries.
-        if (!acc.time.start || new Date(curr.start) < new Date(acc.time.start)) acc.time.start = curr.start;
-        if (!acc.time.end || new Date(curr.end) > new Date(acc.time.end)) acc.time.end = curr.end;
         return acc;
     }, {
-        lines: [],
-        time: {}
+        lines: []
     });
-    // Calculate overall timeline duration in days.
-    timeline.time.duration = (new Date(timeline.time.end) - new Date(timeline.time.start)) / 86400000;
-    return timeline;
+    // Create a set of all unique time marks (start and end dates)
+    const timeMarksSet = new Set();
+    timelineItems.forEach((item)=>{
+        timeMarksSet.add(item.start);
+        timeMarksSet.add(item.end);
+    });
+    // Convert the set to an array and sort the time marks
+    const timeMarks = Array.from(timeMarksSet).sort((a, b)=>new Date(a) - new Date(b));
+    // Build the time segments array:
+    // Each segment is defined by a start time mark, the next time mark as end, and the duration (in days) between them.
+    const time = [];
+    for(let i = 0; i < timeMarks.length - 1; i++){
+        const start = timeMarks[i];
+        const end = timeMarks[i + 1];
+        const duration = (new Date(end) - new Date(start)) / 86400000;
+        time.push({
+            start,
+            end,
+            duration
+        });
+    }
+    return {
+        lines: result.lines,
+        time
+    };
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire9642", {}, null, null, "http://localhost:1234")
